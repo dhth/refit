@@ -1,6 +1,7 @@
 alias a := all
 alias b := build
 alias c := check
+alias d := deny
 alias f := fmt
 alias fc := fmt-check
 alias i := install
@@ -18,6 +19,9 @@ build:
 
 check:
     cargo check --all-targets
+
+deny:
+    cargo deny check
 
 fmt:
     cargo fmt --all

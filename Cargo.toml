@@ -2,6 +2,21 @@
 name = "refit"
 version = "0.1.0"
 edition = "2024"
+license = "MIT"
+repository = "https://github.com/dhth/refit"
+description = "replace local paths with contents from remote git repositories"
+homepage = "https://github.com/dhth/refit"
+keywords = [
+    "cli",
+]
+categories = [
+    "command-line-utilities",
+]
+exclude = [
+    ".github",
+    "deny.toml",
+    "justfile",
+]
 
 [dependencies]
 anyhow = "1.0"
