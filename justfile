@@ -7,6 +7,7 @@ alias i := install
 alias l := lint
 alias lf := lint-fix
 alias r := run
+alias re := review
 alias t := test
 
 @default:
@@ -16,7 +17,7 @@ build:
     cargo build
 
 check:
-    cargo check
+    cargo check --all-targets
 
 fmt:
     cargo fmt --all
@@ -41,6 +42,9 @@ run *ARGS:
 
 test:
     cargo test
+
+review *FLAGS:
+    cargo insta test --review {{ FLAGS }}
 
 @all:
     just check

@@ -1,0 +1,18 @@
+sources:
+  - name: shared
+    repo: git@github.com:dhth/graphc.git
+    updates:
+      - name: workflows
+        path: .github/workflows
+        target: .github/workflows
+
+      - name: scripts
+        path: scripts/shared
+        target: scripts/shared
+
+  - name: templates
+    repo: https://github.com/dhth/another-repo.git
+    updates:
+      - name: basic
+        path: templates/basic
+        target: templates/basic
