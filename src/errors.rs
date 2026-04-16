@@ -1,4 +1,4 @@
-use crate::cmds::{DiffError, RunError};
+use crate::cmds::{DiffError, RunError, WriteSkillError};
 use crate::config::ConfigError;
 
 const SAMPLE_CONFIG: &str = include_str!("assets/sample-config.yml");
@@ -11,6 +11,8 @@ pub enum AppError {
     Run(#[from] RunError),
     #[error(transparent)]
     Diff(#[from] DiffError),
+    #[error(transparent)]
+    WriteSkill(#[from] WriteSkillError),
     #[error(transparent)]
     Unexpected(#[from] anyhow::Error),
 }
