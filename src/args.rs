@@ -26,6 +26,8 @@ pub enum RefitCommand {
         #[arg(value_name = "ID")]
         id: String,
     },
+    /// Write a SKILL.md for refit in the current directory
+    WriteSkill,
 }
 
 fn parse_regex(value: &str) -> Result<Regex, String> {

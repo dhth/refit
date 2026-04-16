@@ -4,6 +4,12 @@ use clap::Parser;
 
 pub fn run() -> Result<(), AppError> {
     let args = Args::parse();
+
+    if let RefitCommand::WriteSkill = args.command {
+        crate::cmds::handle_write_skill()?;
+        return Ok(());
+    }
+
     let config = crate::config::load()?;
 
     match args.command {
@@ -16,6 +22,7 @@ pub fn run() -> Result<(), AppError> {
         RefitCommand::Diff { id } => {
             crate::cmds::handle_diff(config, id)?;
         }
+        RefitCommand::WriteSkill => {}
     }
 
     Ok(())
