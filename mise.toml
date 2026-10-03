@@ -12,11 +12,11 @@ yamlfmt = "latest"
 
 [tasks.all]
 alias = "a"
-description = "Check, format, lint, and test"
+description = "Format, lint, build and test"
 run = [
-    { task = "check" },
     { task = "fmt" },
     { task = "lint" },
+    { task = "build" },
     { task = "test" },
 ]
 
