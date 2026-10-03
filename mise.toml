@@ -5,6 +5,7 @@ task.run_auto_install = false
 [tools]
 actionlint = "latest"
 cargo-deny = "latest"
+cargo-dist = "0.33.0"
 # Keep this version in sync with the insta dependency in Cargo.toml.
 cargo-insta = "1.49.0"
 yamlfmt = "latest"
