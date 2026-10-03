@@ -1,0 +1,7 @@
+paths:
+  .github/workflows/release.yml:
+    ignore:
+      # Keep cargo-dist's generated workflow unchanged. It splits flag strings
+      # and uses repeated redirects when writing GitHub Actions outputs.
+      - 'shellcheck reported issue in this script: SC2086:'
+      - 'shellcheck reported issue in this script: SC2129:'
