@@ -16,7 +16,6 @@ jobs:
       contents: read
     outputs:
       code: ${{ steps.filter.outputs.code }}
-      deps: ${{ steps.filter.outputs.deps }}
       workflows: ${{ steps.filter.outputs.workflows }}
       yml: ${{ steps.filter.outputs.yml }}
     steps:
@@ -35,14 +34,6 @@ jobs:
               - rust-toolchain.toml
               - mise.toml
               - mise.lock
-              - ".github/workflows/main.yml"
-            deps:
-              - "Cargo.toml"
-              - "Cargo.lock"
-              - "deny.toml"
-              - "rust-toolchain.toml"
-              - "mise.toml"
-              - "mise.lock"
               - ".github/workflows/main.yml"
             workflows:
               - ".github/**/*.yml"
@@ -109,17 +100,3 @@ jobs:
           install_args: actionlint
       - name: Lint workflows
         run: mise run lint:actions
-
-  audit:
-    needs: changes
-    if: ${{ needs.changes.outputs.deps == 'true' }}
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v7
-      - name: Set up mise
-        uses: jdx/mise-action@v5
-        with:
-          install_args: rust cargo-deny
-      - name: Audit dependencies
-        run: mise run deny

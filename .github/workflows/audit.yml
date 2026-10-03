@@ -1,0 +1,19 @@
+name: audit
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '30 2 * * 2,6'
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+      - name: Set up mise
+        uses: jdx/mise-action@v5
+        with:
+          install_args: rust cargo-deny
+      - name: Run cargo-deny
+        run: mise run deny
