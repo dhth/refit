@@ -4,21 +4,22 @@ on:
   pull_request:
 
 env:
+  CARGO_PROFILE_DEV_DEBUG: "0"
   CARGO_TERM_COLOR: always
 
 jobs:
   changes:
     runs-on: ubuntu-latest
     permissions:
+      contents: read
       pull-requests: read
     outputs:
       code: ${{ steps.filter.outputs.code }}
-      deps: ${{ steps.filter.outputs.deps }}
       workflows: ${{ steps.filter.outputs.workflows }}
       yml: ${{ steps.filter.outputs.yml }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
       - uses: dorny/paths-filter@v4
         id: filter
         with:
@@ -29,17 +30,18 @@ jobs:
               - Cargo.*
               - clippy.toml
               - rust-toolchain.toml
-              - ".github/workflows/pr.yml"
-            deps:
-              - "Cargo.toml"
-              - "Cargo.lock"
-              - "deny.toml"
+              - mise.toml
+              - mise.lock
               - ".github/workflows/pr.yml"
             workflows:
               - ".github/**/*.yml"
+              - "mise.toml"
+              - "mise.lock"
             yml:
               - "**.yml"
               - "**.yaml"
+              - "mise.toml"
+              - "mise.lock"
 
   build:
     needs: changes
@@ -49,30 +51,25 @@ jobs:
         os: [ubuntu-latest, macos-latest]
     runs-on: ${{ matrix.os }}
     steps:
-      - uses: actions/checkout@v6
-      - name: Install toolchain
-        uses: actions-rust-lang/setup-rust-toolchain@v1
+      - uses: actions/checkout@v7
+      - name: Set up mise
+        uses: jdx/mise-action@v5
+        with:
+          install_args: rust
+      - name: Set up Rust cache
+        uses: Swatinem/rust-cache@v2
+        with:
+          cache-on-failure: true
+      - name: Check formatting
+        run: mise run fmt:check
+      - name: Lint
+        run: mise run lint
       - name: Build
-        run: cargo build
+        run: mise run build
       - name: Test
         env:
           RUST_BACKTRACE: 0
-        run: cargo test
-
-  lint:
-    needs: changes
-    if: ${{ needs.changes.outputs.code == 'true' }}
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v6
-      - name: Install toolchain
-        uses: actions-rust-lang/setup-rust-toolchain@v1
-        with:
-          components: clippy, rustfmt
-      - name: Check formatting
-        run: cargo fmt --all -- --check
-      - name: Lint
-        run: cargo clippy
+        run: mise run test
 
   lint-yaml:
     needs: changes
@@ -80,8 +77,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
-      - uses: dhth/composite-actions/.github/actions/lint-yaml@main
+        uses: actions/checkout@v7
+      - name: Set up mise
+        uses: jdx/mise-action@v5
+        with:
+          install_args: yamlfmt
+      - name: Lint YAML
+        run: mise run lint:yaml
 
   lint-workflows:
     needs: changes
@@ -89,14 +91,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
-      - uses: dhth/composite-actions/.github/actions/lint-actions@main
-
-  audit:
-    needs: changes
-    if: ${{ needs.changes.outputs.deps == 'true' }}
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v6
-      - uses: dhth/composite-actions/.github/actions/cargo-deny@main
+        uses: actions/checkout@v7
+      - name: Set up mise
+        uses: jdx/mise-action@v5
+        with:
+          install_args: actionlint
+      - name: Lint workflows
+        run: mise run lint:actions

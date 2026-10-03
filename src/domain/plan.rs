@@ -98,7 +98,7 @@ impl RunPlan {
         let matches_updates = updates
             .into_iter()
             .filter_map(|update| {
-                let update_id = format!("{}/{}", &source_name, &update.name);
+                let update_id = format!("{}/{}", source_name, update.name);
                 if regex.is_match(&update_id) {
                     Some(RunUpdate {
                         name: update.name,

@@ -1,11 +1,5 @@
 ## Common Commands
-- Prefer `just` over raw `cargo` commands.
-- Check: `just check`
-- Format: `just fmt`
-- Lint: `just lint`
-- Test: `just test`
-- Full local sweep: `just all`
-- Run the CLI: `just run -- <ARGS>`
+This project uses `mise` for tool management and tasks. Always use `mise` to execute project commands; see `mise.toml` for the available tasks.
 
 ## Repo Layout
 - Entry point: `src/main.rs`
@@ -25,5 +19,5 @@
 - Use snapshot tests with `insta` when changing config parsing or validation output.
 
 ## Change Checks
-- Run the smallest relevant command first, then `just all` if the change touches multiple paths.
-- If snapshots change, review them with `just review` before finishing.
+- Update snapshots with `mise run update-snapshots`; `mise run review-snapshots` is reserved for human review.
+- Keep `cargo-insta` in `mise.toml` and the `insta` dependency in `Cargo.toml` pinned to the same version.
