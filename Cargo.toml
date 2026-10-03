@@ -30,7 +30,7 @@ tempfile = "3.27.0"
 thiserror = "2.0.21"
 
 [dev-dependencies]
-insta = { version = "=1.49.0", features = ["yaml"] }
+insta = { version = "1.49.0", features = ["yaml"] }
 
 # The profile that 'dist' will build with
 [profile.dist]
